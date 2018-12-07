@@ -6,9 +6,11 @@ in order to demonstrate features offered by spring-cloud.
 ##### Schema:
 ![Project Schema](ServiceSchema_1.png "Project Schema")  
 
-services: 
+considered services: 
 - Eureka - service discovery
 - Zuul - reverse proxy, intelligent routing
+- Hystrix - Circuit breaker pattern
+- Load balancing
 
 ### requirements
 project uses Maven build system and Java 11. 

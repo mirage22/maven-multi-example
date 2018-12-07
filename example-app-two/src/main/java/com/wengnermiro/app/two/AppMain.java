@@ -32,6 +32,7 @@
 
 package com.wengnermiro.app.two;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.wengnermiro.app.two.config.AppConfig;
 import com.wengnermiro.commons.CommonFeature;
 import com.wengnermiro.commons.dto.BasicStatus;
@@ -41,6 +42,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.ParameterizedTypeReference;
@@ -48,6 +50,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -67,6 +70,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
  *
  * @author Miroslav Wengner (@miragemiko)
  */
+@EnableCircuitBreaker
 @EnableEurekaClient
 @RestController
 @EnableAutoConfiguration
@@ -90,11 +94,13 @@ public class AppMain {
     }
 
     private final RestTemplate restTemplate;
+    private final HystrixSampleService hystrixSampleService;
 
     @Autowired
-    public AppMain(final RestTemplate restTemplate) {
+    public AppMain(final RestTemplate restTemplate, final HystrixSampleService hystrixSampleService) {
         active = true;
         this.restTemplate = restTemplate;
+        this.hystrixSampleService = hystrixSampleService;
     }
 
     @RequestMapping(method =
@@ -124,6 +130,15 @@ public class AppMain {
         return extendedData;
     }
 
+    @RequestMapping(value = "/fail", method =
+            RequestMethod.GET,
+            produces = {APPLICATION_JSON_VALUE},
+            consumes = {APPLICATION_JSON_VALUE})
+    @ResponseBody
+    public DataStatus failGet() {
+        return hystrixSampleService.getData();
+    }
+
     @RequestMapping(value = "/add", method =
             RequestMethod.POST,
             produces = {APPLICATION_JSON_VALUE},
@@ -135,13 +150,37 @@ public class AppMain {
     }
 
 
-    private ResponseEntity<DataStatus> requestDataGet(RestTemplate restTemplate, String url, Object... vars) {
+    private static  ResponseEntity<DataStatus> requestDataGet(RestTemplate restTemplate, String url, Object... vars) {
         HttpHeaders header = new HttpHeaders();
         header.add(CONTENT_TYPE, APPLICATION_JSON_VALUE);
         HttpEntity<DataStatus> httpEntity = new HttpEntity<>(header);
         return restTemplate.exchange(url, HttpMethod.GET,
                 httpEntity, new ParameterizedTypeReference<DataStatus>() {
                 }, vars);
+
+    }
+
+    @Service
+    public static class HystrixSampleService {
+        private final RestTemplate restTemplate;
+
+        @Autowired
+        public HystrixSampleService(RestTemplate restTemplate) {
+            this.restTemplate = restTemplate;
+        }
+
+        @HystrixCommand(fallbackMethod = "failFast")
+        public DataStatus getData() {
+            ResponseEntity<DataStatus> responseData = requestDataGet(restTemplate, "http://example-app-one/one/notvalid");
+            return responseData.getBody();
+        }
+
+        public DataStatus failFast() {
+            DataStatus dataStatus = new DataStatus();
+            dataStatus.setSuccess(false);
+            dataStatus.setMessagge("FailFast");
+            return dataStatus;
+        }
 
     }
 }

@@ -14,7 +14,7 @@
 
     <properties>
         <spring.boot.version>2.1.1.RELEASE</spring.boot.version>
-        <spring.cloud.eureka.client.version>2.0.2.RELEASE</spring.cloud.eureka.client.version>
+        <spring.cloud.client.version>2.0.2.RELEASE</spring.cloud.client.version>
         <spring.cloud.dependencies.version>Finchley.SR2</spring.cloud.dependencies.version>
     </properties>
 
@@ -42,8 +42,13 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
+            <version>${spring.cloud.client.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-            <version>${spring.cloud.eureka.client.version}</version>
+            <version>${spring.cloud.client.version}</version>
         </dependency>
     </dependencies>
 
