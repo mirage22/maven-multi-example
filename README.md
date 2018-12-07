@@ -6,7 +6,7 @@ in order to demonstrate features offered by spring-cloud.
 ##### Schema:
 ![Project Schema](ServiceSchema_1.png "Project Schema")  
 
-considered services: 
+used technology stack: 
 - Service discovery :: Eureka
 - Reverse proxy, intelligent routingZuul :: reverse proxy, intelligent routing
 - Circuit breaker pattern :: Hystrix
@@ -26,6 +26,10 @@ The project contains following micro-services:
 - example-app-two (port: 8082)
 - example-eureka (port: 8761)
 - example-config-server (port: 8090)
+
+######Eureka: discovered service
+![Discovered services](Eureka_interface_1.png "Discovered services")  
+
 
 All micro-services are spring-boot based
 
