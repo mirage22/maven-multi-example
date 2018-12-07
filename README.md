@@ -1,9 +1,12 @@
 ## maven-multi-example project
 
 The project contains set of service modules (one, two) with additional shared libraries 
- in order to demonstrate features offered by spring-cloud. 
+in order to demonstrate features offered by spring-cloud. 
 
-service: 
+##### Schema:
+![Project Schema](ServiceSchema_1.png "Project Schema")  
+
+services: 
 - Eureka - service discovery
 - Zuul - reverse proxy, intelligent routing
 
