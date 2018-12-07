@@ -36,6 +36,9 @@ import com.wengnermiro.commons.CommonFeature;
 import com.wengnermiro.commons.dto.BasicStatus;
 import com.wengnermiro.commons.dto.DataStatus;
 import com.wengnermiro.commons.dto.SampleData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
@@ -63,6 +66,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RequestMapping(value = "/one")
 public class AppMain {
 
+    private static final Logger log = LoggerFactory.getLogger(AppMain.class);
     private static final String NAME = "firstService";
     private static boolean active;
 
@@ -76,6 +80,9 @@ public class AppMain {
     public static boolean isActive() {
         return active;
     }
+
+    @Value("${info.magic}")
+    private String cloudValue;
 
     public AppMain() {
         active = true;
@@ -99,6 +106,7 @@ public class AppMain {
             consumes = {APPLICATION_JSON_VALUE})
     @ResponseBody
     public DataStatus dataGet() {
+        log.info("CLOUD VALUE: " + cloudValue);
         return CommonFeature.createData(storage, true);
     }
 
@@ -108,6 +116,9 @@ public class AppMain {
             consumes = {APPLICATION_JSON_VALUE})
     @ResponseBody
     public DataStatus addDataPost(@RequestBody SampleData data) {
+
+
+
         storage.put(counter.getAndIncrement(), data);
         return CommonFeature.createData(storage, true);
     }

@@ -12,6 +12,7 @@
         <module>example-app-one</module>
         <module>example-app-two</module>
         <module>example-eureka</module>
+        <module>example-config-server</module>
     </modules>
     <properties>
         <java.version>11</java.version>

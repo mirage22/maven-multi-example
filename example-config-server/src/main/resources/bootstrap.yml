@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: example-config-server
+  cloud:
+    config:
+      server:
+        git:
+          uri: file://${USER_HOME}/maven-multi-example
+          searchPaths: server-config

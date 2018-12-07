@@ -7,10 +7,11 @@ in order to demonstrate features offered by spring-cloud.
 ![Project Schema](ServiceSchema_1.png "Project Schema")  
 
 considered services: 
-- Eureka - service discovery
-- Zuul - reverse proxy, intelligent routing
-- Hystrix - Circuit breaker pattern
-- Load balancing
+- Service discovery :: Eureka
+- Reverse proxy, intelligent routingZuul :: reverse proxy, intelligent routing
+- Circuit breaker pattern :: Hystrix
+- Load balancing (client side) :: Ribbon
+- Distributed/versioned configuration :: Spring Cloud Config
 
 ### requirements
 project uses Maven build system and Java 11. 
@@ -24,6 +25,7 @@ The project contains following micro-services:
 - example-app-one (port: 8081)
 - example-app-two (port: 8082)
 - example-eureka (port: 8761)
+- example-config-server (port: 8090)
 
 All micro-services are spring-boot based
 
