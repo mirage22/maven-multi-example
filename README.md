@@ -3,6 +3,9 @@
 The project contains set of service modules (one, two) with additional shared libraries 
 in order to demonstrate features offered by spring-cloud. 
 
+[![Build Status](https://travis-ci.org/mirage22/maven-multi-example.svg?branch=master)](https://travis-ci.org/mirage22/maven-multi-example)
+
+
 ##### Schema:
 ![Project Schema](ServiceSchema_1.png "Project Schema")  
 
